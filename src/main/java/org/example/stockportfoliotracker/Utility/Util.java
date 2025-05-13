@@ -1,4 +1,4 @@
-package org.example.stockportfoliotracker;
+package org.example.stockportfoliotracker.Utility;
 
 public class Util {
     //CSS Resource Paths

@@ -9,8 +9,6 @@ import org.example.stockportfoliotracker.View.StockView;
 
 import java.util.List;
 
-import static org.example.stockportfoliotracker.ExcelExporter.exportToExcel;
-
 public class StockController {
     private final ObservableList<Stock> stockData = FXCollections.observableArrayList();
     private final StockView stockView;

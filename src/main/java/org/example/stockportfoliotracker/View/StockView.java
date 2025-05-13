@@ -11,15 +11,14 @@ import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Callback;
-import org.apache.poi.ss.usermodel.Table;
 import org.example.stockportfoliotracker.Model.Stock;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
-import static org.example.stockportfoliotracker.ExcelExporter.exportToExcel;
-import static org.example.stockportfoliotracker.Util.*;
+import static org.example.stockportfoliotracker.Utility.ExcelExporter.exportToExcel;
+import static org.example.stockportfoliotracker.Utility.Util.*;
 
 
 public class StockView {
@@ -66,16 +65,40 @@ public class StockView {
 
     public void setupTable(ObservableList<Stock> stockData) {
         tableView.setItems(stockData);
-        for(Stock stock : stockData) {
-            System.out.println(stock.stockName);
-        }
+        tableView.setEditable(true);
         tableView.getColumns().addAll(
                 this.<String>makeColumn("Name",cellData -> cellData.getValue().stockNameProperty()),
-                this.<Number>makeColumn("Price",cellData -> cellData.getValue().stockPriceProperty()),
+                makePriceColumn(),
                 this.<String> makeColumn("Symbol",cellData -> cellData.getValue().tickerSymbolProperty()),
                 this.<String>makeColumn("Market Cap",cellData -> cellData.getValue().marketCapitalizationProperty()),
                 makeDeleteColumn()
         );
+    }
+
+    private TableColumn<Stock,Number> makePriceColumn() {
+        TableColumn<Stock,Number> priceCol = new TableColumn<Stock,Number>("Price");
+        priceCol.setCellValueFactory(c -> c.getValue().stockPriceProperty());
+        priceCol.setCellFactory(table -> new TableCell<>() {
+            @Override
+            protected void updateItem(Number price, boolean empty) {
+                super.updateItem(price,empty);
+
+                if (empty || price == null) {
+                    setText(null);
+                    setStyle("");
+                    return;
+                }
+
+                setText(String.format("%.2f", price.doubleValue()));
+
+                double p = price.doubleValue();
+                if (p < 100) setStyle("-fx-background-color: red;");
+                else if (p < 200) setStyle("-fx-background-color: yellow;");
+                else setStyle("-fx-background-color: green;");
+            }
+        });
+        priceCol.setPrefWidth(100);
+        return priceCol;
     }
 
     private TableColumn<Stock,Void> makeDeleteColumn() {

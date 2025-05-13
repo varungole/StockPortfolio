@@ -1,4 +1,4 @@
-package org.example.stockportfoliotracker;
+package org.example.stockportfoliotracker.Utility;
 
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;

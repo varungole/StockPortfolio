@@ -9,4 +9,6 @@ module org.example.stockportfoliotracker {
     exports org.example.stockportfoliotracker;
     exports org.example.stockportfoliotracker.Model;
     opens org.example.stockportfoliotracker.Model to javafx.fxml;
+    exports org.example.stockportfoliotracker.Utility;
+    opens org.example.stockportfoliotracker.Utility to javafx.fxml;
 }
