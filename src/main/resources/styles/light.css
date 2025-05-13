@@ -1,0 +1,8 @@
+.root {
+  -fx-background-color: white;
+  -fx-text-fill: black;
+}
+.table-view {
+  -fx-control-inner-background: white;
+  -fx-text-fill: black;
+}

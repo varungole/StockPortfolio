@@ -1,6 +1,7 @@
 module org.example.stockportfoliotracker {
     requires javafx.controls;
     requires javafx.fxml;
+    requires java.scripting;
 
 
     opens org.example.stockportfoliotracker to javafx.fxml;
