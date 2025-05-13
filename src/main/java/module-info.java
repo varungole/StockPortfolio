@@ -2,6 +2,7 @@ module org.example.stockportfoliotracker {
     requires javafx.controls;
     requires javafx.fxml;
     requires java.scripting;
+    requires org.apache.poi.ooxml;
 
 
     opens org.example.stockportfoliotracker to javafx.fxml;

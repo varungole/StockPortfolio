@@ -9,6 +9,8 @@ import org.example.stockportfoliotracker.View.StockView;
 
 import java.util.List;
 
+import static org.example.stockportfoliotracker.ExcelExporter.exportToExcel;
+
 public class StockController {
     private final ObservableList<Stock> stockData = FXCollections.observableArrayList();
     private final StockView stockView;
@@ -26,6 +28,7 @@ public class StockController {
         stockView.getAddButton().setOnAction(e -> insertRow());
         stockView.getSwitchLightMode().setOnAction(e -> stockView.toggleMode());
         stockView.getShowPieChartButton().setOnAction(e -> showPieChart());
+        stockView.getExportToCSV().setOnAction(e -> stockView.exportToCSV());
     }
 
     private void showPieChart() {

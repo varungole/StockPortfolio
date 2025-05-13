@@ -8,12 +8,17 @@ import javafx.scene.chart.PieChart;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+import org.apache.poi.ss.usermodel.Table;
 import org.example.stockportfoliotracker.Model.Stock;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 
+import static org.example.stockportfoliotracker.ExcelExporter.exportToExcel;
 import static org.example.stockportfoliotracker.Util.*;
 
 
@@ -29,6 +34,7 @@ public class StockView {
     private final Button addButton             = new Button("Add Stock");
     private final Button showPieChartButton    = new Button("Show Pie Chart");
     private final Button switchLightMode       = new Button("Switch Dark Mode");
+    private final Button exportToCSV           = new Button("Export to Excel");
 
     private final TableView<Stock> tableView   = new TableView<>();
     private final Label errorLabel             = new Label();
@@ -49,6 +55,7 @@ public class StockView {
     public Button getShowPieChartButton() {return this.showPieChartButton;}
     public Button getSwitchLightMode() {return this.switchLightMode;}
     public Label getErrorLabel() {return this.errorLabel;}
+    public Button getExportToCSV() {return this.exportToCSV;}
 
 
     private <T>TableColumn<Stock,T> makeColumn(String title, Callback<TableColumn.CellDataFeatures<Stock,T>, ObservableValue<T>> callback) {
@@ -95,7 +102,7 @@ public class StockView {
     public VBox createLayout() {
         HBox inputBox = new HBox(10, nameInput, priceInput, symbolInput,marketCapInput, addButton, switchLightMode);
         errorLabel.getStyleClass().add(ERROR_LABEL);
-        root = new VBox(10,inputBox,errorLabel,tableView,showPieChartButton);
+        root = new VBox(10,inputBox,errorLabel,tableView,showPieChartButton,exportToCSV);
         root.setPadding(new Insets(10));
         isDarkMode = false;
         return root;
@@ -122,5 +129,25 @@ public class StockView {
         chartStage.setTitle("Portfolio Pie Chart");
         chartStage.setScene(new Scene(chartLayout,500,400));
         chartStage.show();
+    }
+
+    public void exportToCSV() {
+        try {
+            exportTable(tableView);
+        } catch (IOException e) {
+            System.out.println("Couldn't extract into excel");
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void exportTable(TableView tableView) throws IOException {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Excel Files", "*.xlsx"));
+
+        File file = fileChooser.showSaveDialog(tableView.getScene().getWindow());
+
+        if(file != null) {
+            exportToExcel(tableView, "FXUserData", file.getAbsolutePath());
+        }
     }
 }
